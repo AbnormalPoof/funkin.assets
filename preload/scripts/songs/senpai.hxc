@@ -8,22 +8,25 @@ import funkin.play.song.Song;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.util.FlxTimer;
-
 import funkin.effects.RetroCameraFade;
 
-class SenpaiSong extends Song {
+class SenpaiSong extends Song
+{
   var hasPlayedCutscene:Bool;
 
-	public function new() {
-		super('senpai');
-	}
+  public function new()
+  {
+    super('senpai');
+  }
 
-  public override function onCountdownStart(event:CountdownScriptEvent):Void {
-		super.onCountdownStart(event);
+  public override function onCountdownStart(event:CountdownScriptEvent):Void
+  {
+    super.onCountdownStart(event);
 
     if (!PlayStatePlaylist.isStoryMode) hasPlayedCutscene = true;
 
-    if (!hasPlayedCutscene) {
+    if (!hasPlayedCutscene)
+    {
       trace('Pausing countdown to play cutscene.');
 
       hasPlayedCutscene = true;
@@ -34,9 +37,10 @@ class SenpaiSong extends Song {
 
       transitionToDialogue();
     }
-	}
+  }
 
-  function transitionToDialogue() {
+  function transitionToDialogue()
+  {
     trace('Transitioning to dialogue.');
 
     PlayState.instance.camCutscene.visible = true;
@@ -58,18 +62,19 @@ class SenpaiSong extends Song {
       RetroCameraFade.fadeBlack(PlayState.instance.camGame, 12, 2);
     });
 
-    FlxTween.num(0.0, 1.0, 2.0, {
-      ease: FlxEase.linear,
-      startDelay: 0.25,
-      onComplete: function (input) {
-
-        // black.visible = false;
-        startDialogue();
-      }
-    }, tweenFunction);
+    FlxTween.num(0.0, 1.0, 2.0,
+      {
+        ease: FlxEase.linear,
+        startDelay: 0.25,
+        onComplete: function(input) {
+          // black.visible = false;
+          startDialogue();
+        }
+      }, tweenFunction);
   }
 
-  function startDialogue() {
+  function startDialogue()
+  {
     PlayState.instance.startConversation('senpai');
   }
 
@@ -93,7 +98,8 @@ class SenpaiSong extends Song {
     hasPlayedCutscene = false;
   }
 
-  public override function onDialogueEnd() {
+  public override function onDialogueEnd()
+  {
     // We may need to wait for the outro to play.
     PlayState.instance.currentStage.resume();
     Countdown.performCountdown();

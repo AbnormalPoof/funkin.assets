@@ -5,17 +5,20 @@ import funkin.play.PauseSubState;
 import flixel.FlxSprite;
 import flixel.FlxG;
 
-class BFPixelCharacter extends MultiSparrowCharacter {
-	function new() {
-		super('bf-pixel');
-	}
+class BFPixelCharacter extends MultiSparrowCharacter
+{
+  function new()
+  {
+    super('bf-pixel');
+  }
 
-	function onCreate(event:ScriptEvent) {
-		super.onCreate(event);
+  function onCreate(event:ScriptEvent)
+  {
+    super.onCreate(event);
 
-		GameOverSubState.musicSuffix = '-pixel';
-		GameOverSubState.blueBallSuffix = '-pixel';
+    GameOverSubState.musicSuffix = '-pixel';
+    GameOverSubState.blueBallSuffix = '-pixel';
 
-		PauseSubState.musicSuffix = '-pixel';
-	}
+    PauseSubState.musicSuffix = '-pixel';
+  }
 }

@@ -90,6 +90,8 @@ class PhillyTrainErectStage extends Stage
 
 	function doppleGangerCutscene(){
 
+		// Disable player input during cutscene, so you can't get a gameover during cutscene
+		PlayState.instance.isInCutscene = true;
 		skipText = new FlxText(936, 618, 0, 'Skip [ ' + PlayState.instance.controls.getDialogueNameFromToken("CUTSCENE_ADVANCE", true) + ' ]', 20);
     skipText.setFormat(Paths.font('vcr.ttf'), 40, 0xFFFFFFFF, "right", FlxTextBorderStyle.OUTLINE, 0xFF000000);
     skipText.scrollFactor.set();
@@ -125,7 +127,8 @@ class PhillyTrainErectStage extends Stage
 		var cigarettePos:Array<Float> = [];
 		var shooterPos:Array<Float> = [];
 
-		bloodPool = ScriptedFlxAtlasSprite.init('PicoBloodPool', 0, 0);
+		// Temporary crash fix
+		bloodPool = (Preferences.naughtyness) ? ScriptedFlxAtlasSprite.init('PicoBloodPool', 0, 0) : null;
 		picoPlayer = ScriptedFlxAtlasSprite.init('PicoDopplegangerSprite', 0, 0);
 		picoOpponent = ScriptedFlxAtlasSprite.init('PicoDopplegangerSprite', 0, 0);
 		cigarette = new FlxSprite(0, 0);
@@ -137,7 +140,7 @@ class PhillyTrainErectStage extends Stage
 
 		if(playerShoots == true){
 			picoOpponent.zIndex = picoPlayer.zIndex - 1;
-			bloodPool.zIndex = picoOpponent.zIndex - 1;
+			if(bloodPool != null) bloodPool.zIndex = picoOpponent.zIndex - 1;
 			cigarette.zIndex = PlayState.instance.currentStage.getBoyfriend().zIndex - 2;
 			cigarette.flipX = true;
 
@@ -148,10 +151,10 @@ class PhillyTrainErectStage extends Stage
 			cigarettePos = [PlayState.instance.currentStage.getDad().cameraFocusPoint.x, PlayState.instance.currentStage.getDad().cameraFocusPoint.y];
 		}else{
 			picoOpponent.zIndex = picoPlayer.zIndex + 1;
-			bloodPool.zIndex = picoPlayer.zIndex - 1;
+			if(bloodPool != null) bloodPool.zIndex = picoPlayer.zIndex - 1;
 			cigarette.zIndex = PlayState.instance.currentStage.getDad().zIndex - 2;
 
-			bloodPool.setPosition(PlayState.instance.currentStage.getBoyfriend().x - 788.5, PlayState.instance.currentStage.getBoyfriend().y - 173);
+			if(bloodPool != null) bloodPool.setPosition(PlayState.instance.currentStage.getBoyfriend().x - 788.5, PlayState.instance.currentStage.getBoyfriend().y - 173);
 			cigarette.setPosition(PlayState.instance.currentStage.getBoyfriend().x - 478.5, PlayState.instance.currentStage.getBoyfriend().y + 205);
 
 			cigarettePos = [PlayState.instance.currentStage.getBoyfriend().cameraFocusPoint.x, PlayState.instance.currentStage.getBoyfriend().cameraFocusPoint.y];
@@ -166,12 +169,12 @@ class PhillyTrainErectStage extends Stage
 		PlayState.instance.currentStage.add(cigarette);
 		PlayState.instance.currentStage.add(picoPlayer);
     PlayState.instance.currentStage.add(picoOpponent);
-		PlayState.instance.currentStage.add(bloodPool);
+		if(bloodPool != null) PlayState.instance.currentStage.add(bloodPool);
 		PlayState.instance.currentStage.refresh();
 
 		picoPlayer.shader = colorShader;
 		picoOpponent.shader = colorShader;
-		bloodPool.shader = colorShader;
+		if(bloodPool != null) bloodPool.shader = colorShader;
 
 		PlayState.instance.currentStage.getBoyfriend().visible = false;
 		PlayState.instance.currentStage.getDad().visible = false;
@@ -213,7 +216,7 @@ class PhillyTrainErectStage extends Stage
 
 		new FlxTimer(cutsceneTimerManager).start(11.2, _ -> {
 			if(explode == true)
-				bloodPool.scriptCall('doAnim');
+				if(bloodPool != null) bloodPool.scriptCall('doAnim');
 		});
 
 		new FlxTimer(cutsceneTimerManager).start(11.5, _ -> {
